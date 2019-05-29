@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EthereumAPI", "EthereumAPI\EthereumAPI.csproj", "{C890A50E-8715-4DFC-9DF1-9B62D670CFD3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C890A50E-8715-4DFC-9DF1-9B62D670CFD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C890A50E-8715-4DFC-9DF1-9B62D670CFD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C890A50E-8715-4DFC-9DF1-9B62D670CFD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C890A50E-8715-4DFC-9DF1-9B62D670CFD3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
