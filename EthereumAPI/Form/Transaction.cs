@@ -1,3 +1,4 @@
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 namespace EthereumAPI.Form
 {
     public class Transaction

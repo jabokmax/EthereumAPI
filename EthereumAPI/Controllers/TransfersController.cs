@@ -1,10 +1,15 @@
 using System;
 using System.Threading.Tasks;
-using EthereumAPI.Form;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
+using Transaction = EthereumAPI.Form.Transaction;
+// ReSharper disable SuggestVarOrType_SimpleTypes
+// ReSharper disable SuggestVarOrType_Elsewhere
+// ReSharper disable SuggestVarOrType_BuiltInTypes
 
 namespace EthereumAPI.Controllers
 {
@@ -20,16 +25,16 @@ namespace EthereumAPI.Controllers
             Console.WriteLine($"Transferring From {transaction.SenderPrivateKey} to {transaction.RecieverAddress} value {transaction.Amount}");
 
             // Create Instance 
-            var account = new Account(transaction.SenderPrivateKey);
+            Account account = new Account(transaction.SenderPrivateKey);
             
-            var web3 = new Web3(
+            Web3 web3 = new Web3(
                 account, 
                 "http://localhost:7545"
                 );
             
             // Check balance
-            var balance = await web3.Eth.GetBalance.SendRequestAsync(account.Address);
-            var currentEth = Web3.Convert.FromWei(balance);
+            HexBigInteger balance = await web3.Eth.GetBalance.SendRequestAsync(account.Address);
+            decimal currentEth = Web3.Convert.FromWei(balance);
 
             try
             {
@@ -37,29 +42,28 @@ namespace EthereumAPI.Controllers
                 {
                     return Conflict();
                 }
-                else
+
+                Task<TransactionReceipt> newTransaction = web3.Eth.GetEtherTransferService()
+                    .TransferEtherAndWaitForReceiptAsync(
+                        transaction.RecieverAddress,
+                        transaction.Amount
+                    );
+                
+                Console.WriteLine(newTransaction.Result.ToString());
+
+                Transaction result = new Transaction
                 {
-                    
-                    var newTransaction = web3.Eth.GetEtherTransferService()
-                        .TransferEtherAndWaitForReceiptAsync(
-                            transaction.RecieverAddress,
-                            transaction.Amount
-                            );
+                    SenderAddress      = account.Address,
+                    RecieverAddress    = transaction.RecieverAddress,
+                    Amount             = transaction.Amount
+                };
 
-                    var result = new Transaction
-                    {
-                        SenderAddress      = account.Address,
-                        RecieverAddress    = transaction.RecieverAddress,
-                        Amount             = transaction.Amount
-                    };
-
-                    return result;
-                }
+                return result;
 
             }
             catch (Exception e)
             {
-                var result = StatusCode(StatusCodes.Status500InternalServerError, e);
+                ObjectResult result = StatusCode(StatusCodes.Status500InternalServerError, e);
                 return result;
             }
 
